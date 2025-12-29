@@ -1,0 +1,62 @@
+{
+  "name": "@gerync/utils",
+  "version": "1.0.0",
+  "description": "A collection of utilities for any type of project, providing logging, error handling, configuration management, and object manipulation helpers.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [
+    "utilities",
+    "error-handling",
+    "logging",
+    "express",
+    "middleware",
+    "validation",
+    "configuration",
+    "i18n",
+    "object-manipulation",
+    "typescript",
+    "multi-language",
+    "utils",
+    "multilingual"
+  ],
+  "author": "gerync",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gerync/utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gerync/utils/issues"
+  },
+  "homepage": "https://github.com/gerync/utils#readme",
+  "peerDependencies": {
+    "express": "^5.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/express": "^4.17.21",
+    "express": "^5.2.1",
+    "typescript": "^5.6.3",
+    "vitest": "^1.6.0"
+  }
+}
