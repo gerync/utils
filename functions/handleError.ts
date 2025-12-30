@@ -1,5 +1,5 @@
-import Configs from './Config';
-import Coloredlog from './Colorlog';
+import Configs from './Config.js';
+import Coloredlog from './Colorlog.js';
 
 /**
  * Express error handler middleware for centralized error handling
@@ -115,7 +115,7 @@ export default function errorHandler(err: any, req: any, res: any, next: any): v
 
     /** Log detailed, color-coded error report for maintainers (skip for user-caused errors) */
     if (!isUserError) {
-        Coloredlog('===================== ERROR REPORT =====================', 'red');
+        Coloredlog('===================== ERROR REPORT =====================', 'red', true);
 
         // Timestamp
         let exactTime = new Date().toISOString();
@@ -127,25 +127,25 @@ export default function errorHandler(err: any, req: any, res: any, next: any): v
         if (requestId) Coloredlog(`RequestId: ${requestId}`, 'yellow');
 
         // Error details
-        Coloredlog(`Status: ${statusCode}`, 'magenta');
-        Coloredlog(`Code: ${code}`, 'magenta');
+        Coloredlog(`Status: ${statusCode}`, 'magenta', true);
+        Coloredlog(`Code: ${code}`, 'magenta', true);
 
         // Messages for comparison
         Coloredlog(`UserMessage: ${responseMessage}`, 'cyan');
         Coloredlog(`RawMessage: ${rawErrorMessage}`, 'white');
 
         // Stack trace for debugging
-        Coloredlog('Stack:', 'gray');
+        Coloredlog('Stack:', 'gray', true);
         Coloredlog(err && err.stack ? String(err.stack) : 'N/A', 'gray');
 
-        Coloredlog('========================================================', 'red');
+        Coloredlog('========================================================', 'red', true);
     }
     // #endregion
 
     // #region Send Response to Client
     /** Return JSON response with error details (safe for client) */
     res.status(statusCode).json({
-        status: 'error',
+        status: statusCode,
         code: code,
         message: responseMessage
     });

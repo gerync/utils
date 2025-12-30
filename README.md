@@ -21,12 +21,12 @@ npm install @gerync/utils
 
 ### 1. coloredlog
 
-Log messages to the console with color support. Accepts hex, RGB, or CSS named colors.
+Log messages to the console with color support. Accepts hex, RGB, or CSS named colors. Optional bold styling works in both browser (`%c`) and Node (ANSI) consoles.
 
 **Import:**
 ```typescript
 import utils from '@gerync/utils';
-utils.coloredlog(message, color);
+utils.coloredlog(message, color, bold?);
 ```
 
 **Usage:**
@@ -35,6 +35,7 @@ utils.coloredlog(message, color);
 utils.coloredlog('This is an error', 'red');
 utils.coloredlog('This is a warning', 'orange');
 utils.coloredlog('Success!', 'green');
+utils.coloredlog('Bold success!', 'green', true);
 
 // Hex colors
 utils.coloredlog('Custom color', '#FF5733');
@@ -51,6 +52,7 @@ utils.coloredlog('No styling', 'invalid-color');
 **Parameters:**
 - `message` (string): The text to log
 - `color` (string): A valid hex (`#XXX`, `#XXXX`, `#XXXXXX`, `#XXXXXXXX`), RGB (`rgb(r, g, b)`), RGBA (`rgba(r, g, b, a)`), or CSS named color
+- `bold` (boolean, default `false`): When true, renders bold text (ANSI in Node, `font-weight` in browsers)
 
 ---
 
@@ -172,7 +174,7 @@ app.use(utils.errorHandler);
 
 ```json
 {
-    "status": "error",
+    "status": 409,
     "code": "ER_DUP_ENTRY",
     "message": "Email address already exists."
 }
