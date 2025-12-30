@@ -10,7 +10,8 @@ export {
     config
 };
 
-export const configure = config.configure;
+export const conf = config.conf;
+export const configure = config.config;
 
 export default {
     coloredlog,

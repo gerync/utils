@@ -3,17 +3,19 @@
  * Accepts hex, RGB, RGBA, and CSS named colors.
  * Falls back to unstyled console.log if color is invalid.
  *
- * @param message - Text to log
+ * @param message - Text to log (string or array of strings for multi-color)
  * @param color - Valid hex (#XXX, #XXXX, #XXXXXX, #XXXXXXXX),
  *                RGB (rgb(r, g, b)), RGBA (rgba(r, g, b, a)),
- *                or CSS named color
+ *                or CSS named color (string or array matching message array)
+ * @param bolded - Apply bold styling (default: false)
  *
  * @example
  * coloredlog('Error!', 'red');
  * coloredlog('Success', '#00FF00');
  * coloredlog('Info', 'rgb(0, 0, 255)');
+ * coloredlog(['Red text', 'Blue text'], ['red', 'blue']);
  */
-export default function Coloredlog(message: string, color: string, bolded: boolean = false): void {
+export default function Coloredlog( message: string | string[], color: string | string[], bolded: boolean = false): void {
     // #region Color Validation Regexes
     /** Regex patterns to validate different color formats */
     const ColorRegex = {
@@ -90,21 +92,63 @@ export default function Coloredlog(message: string, color: string, bolded: boole
     };
     // #endregion
 
-    // #region Validate Color Format
-    /** Test if color matches any valid format */
-    const isValid = 
-        ColorRegex.hex.test(color) || 
-        ColorRegex.rgb.test(color) || 
-        ColorRegex.named.test(color);
+    // #region Handle Multi-Color Array Input
+    if (Array.isArray(message)) {
+        const messages = message;
+        const colors = Array.isArray(color) ? color : Array(messages.length).fill(color);
+        
+        if (isBrowser) {
+            // Build format string with %c placeholders
+            const formatString = messages.map(msg => `%c${msg}`).join('');
+            const styles = colors.map(c => {
+                const weight = bolded ? 'bold' : 'normal';
+                const isValidColor = 
+                    ColorRegex.hex.test(c) || 
+                    ColorRegex.rgb.test(c) || 
+                    ColorRegex.named.test(c);
+                return isValidColor ? `color: ${c}; font-weight: ${weight};` : `font-weight: ${weight};`;
+            });
+            console.log(formatString, ...styles);
+        } else {
+            // Build ANSI string for Node.js
+            const boldAnsi = bolded ? '\x1b[1m' : '';
+            let output = '';
+            
+            for (let i = 0; i < messages.length; i++) {
+                const msg = messages[i];
+                const col = colors[i] || '';
+                const ansi = colorToAnsi(col);
+                
+                if (ansi) {
+                    output += `${ansi}${boldAnsi}${msg}\x1b[0m`;
+                } else if (boldAnsi) {
+                    output += `${boldAnsi}${msg}\x1b[0m`;
+                } else {
+                    output += msg;
+                }
+            }
+            
+            console.log(output);
+        }
+        return;
+    }
     // #endregion
 
-    // #region Output
+    // #region Single Color Output (Original Behavior)
+    const colorStr = Array.isArray(color) ? color[0] : color;
+    
+    /** Test if color matches any valid format */
+    const isValid = 
+        ColorRegex.hex.test(colorStr) || 
+        ColorRegex.rgb.test(colorStr) || 
+        ColorRegex.named.test(colorStr);
+
     if (isValid) {
         if (isBrowser) {
             const weight = bolded ? 'bold' : 'normal';
-            console.log(`%c${message}`, `color: ${color}; font-weight: ${weight};`);
+            console.log(`%c${message}`, `color: ${colorStr}; font-weight: ${weight};`);
         } else {
-            const ansi = colorToAnsi(color);
+            const ansi = colorToAnsi(colorStr);
             const boldAnsi = bolded ? '\x1b[1m' : '';
             if (ansi) {
                 console.log(`${ansi}${boldAnsi}${message}\x1b[0m`);

@@ -15,16 +15,27 @@ let runtimePrefs: any = {
 // #endregion
 
 const Configs = {
-    // #region Configure
+    // #region Config
     /**
      * Initialize configuration with custom responses and preferences.
      * Merges or replaces the runtime state.
      * @param options.responses - Localized message objects by language
      * @param options.prefs - Preferences including acceptedLanguages and noDupesAllowedof
      */
-    configure(options: { responses: any; prefs: any }) {
+    config(options: { responses: any; prefs: any }) {
         runtimeResponses = options.responses;
         runtimePrefs = options.prefs;
+    },
+    // #endregion
+
+    // #region Conf Alias
+    /**
+     * Alias for config(). Initialize configuration with custom responses and preferences.
+     * @param options.responses - Localized message objects by language
+     * @param options.prefs - Preferences including acceptedLanguages and noDupesAllowedof
+     */
+    conf(options: { responses: any; prefs: any }) {
+        return this.config(options);
     },
     // #endregion
 
