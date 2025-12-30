@@ -1,6 +1,6 @@
 {
   "name": "@gerync/utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A collection of utilities for any type of project, providing logging, error handling, configuration management, and object manipulation helpers.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
